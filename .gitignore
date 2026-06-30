@@ -1,0 +1,9 @@
+# Never commit secrets or local config
+settings.local.json
+CLAUDE.local.md
+.env
+.env.*
+*.pem
+*.key
+id_rsa
+id_ed25519

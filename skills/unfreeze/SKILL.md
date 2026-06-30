@@ -1,0 +1,1 @@
+/home/festo/.claude/skills/gstack/unfreeze/SKILL.md

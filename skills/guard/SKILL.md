@@ -1,0 +1,1 @@
+/home/festo/.claude/skills/gstack/guard/SKILL.md
