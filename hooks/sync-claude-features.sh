@@ -76,10 +76,10 @@ if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --o
 
   # Build a meaningful commit message from what changed
   CHANGED=$(git diff --cached --name-only | head -20)
-  SKILLS_ADDED=$(echo "$CHANGED" | grep '^skills/' | awk -F'/' '{print $2}' | sort -u | tr '\n' ', ' | sed 's/,$//')
-  HOOKS_CHANGED=$(echo "$CHANGED" | grep '^hooks/' | wc -l)
-  RULES_CHANGED=$(echo "$CHANGED" | grep '^rules/' | wc -l)
-  OTHER=$(echo "$CHANGED" | grep -v '^skills/\|^hooks/\|^rules/' | head -5 | tr '\n' ', ' | sed 's/,$//')
+  SKILLS_ADDED=$(echo "$CHANGED" | grep '^skills/' | awk -F'/' '{print $2}' | sort -u | tr '\n' ', ' | sed 's/,$//' || true)
+  HOOKS_CHANGED=$(echo "$CHANGED" | grep '^hooks/' | wc -l || echo 0)
+  RULES_CHANGED=$(echo "$CHANGED" | grep '^rules/' | wc -l || echo 0)
+  OTHER=$(echo "$CHANGED" | grep -v '^skills/\|^hooks/\|^rules/' | head -5 | tr '\n' ', ' | sed 's/,$//' || true)
 
   MSG="chore: auto-sync $(date +%Y-%m-%d)"
   [ -n "$SKILLS_ADDED" ]     && MSG="$MSG — skills: $SKILLS_ADDED"
