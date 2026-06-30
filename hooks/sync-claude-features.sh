@@ -83,8 +83,8 @@ if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --o
 
   MSG="chore: auto-sync $(date +%Y-%m-%d)"
   [ -n "$SKILLS_ADDED" ]     && MSG="$MSG — skills: $SKILLS_ADDED"
-  [ "$HOOKS_CHANGED" -gt 0 ] && MSG="$MSG — hooks updated"
-  [ "$RULES_CHANGED" -gt 0 ] && MSG="$MSG — rules updated"
+  [ "${HOOKS_CHANGED:-0}" -gt 0 ] 2>/dev/null && MSG="$MSG — hooks updated" || true
+  [ "${RULES_CHANGED:-0}" -gt 0 ] 2>/dev/null && MSG="$MSG — rules updated" || true
   [ -n "$OTHER" ]             && MSG="$MSG — $OTHER"
 
   git -c user.name="Festo-Wampamba" -c user.email="festougtech@gmail.com" \
