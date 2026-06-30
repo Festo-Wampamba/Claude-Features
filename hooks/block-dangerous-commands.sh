@@ -35,8 +35,18 @@ BR_REGEX=$(printf '%s' "$PROTECTED_BRANCHES" | tr ',' '\n' | awk 'NF{printf "%s%
 contains_cmd() { printf '%s' "$COMMAND" | grep -qE "$1"; }
 contains_icmd() { printf '%s' "$COMMAND" | grep -qiE "$1"; }
 
+# ── Dotfiles / personal repos exempt from branch protection ─────────────
+# Add colon-separated paths to CLAUDE_DOTFILES_REPOS to allow main pushes.
+DOTFILES_REPOS="${CLAUDE_DOTFILES_REPOS:-$HOME/claude-features}"
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || true)
+DOTFILES_EXEMPT=false
+for dr in $(printf '%s' "$DOTFILES_REPOS" | tr ':' '\n'); do
+  [ -n "$GIT_ROOT" ] && [ "$GIT_ROOT" = "$dr" ] && DOTFILES_EXEMPT=true && break
+  [ "$(pwd)" = "$dr" ] && DOTFILES_EXEMPT=true && break
+done
+
 # ── Git push protections ────────────────────────────────────────────────
-if contains_cmd '(^|[;&|()]+[[:space:]]*)git[[:space:]]+push'; then
+if contains_cmd '(^|[;&|()]+[[:space:]]*)git[[:space:]]+push' && [ "$DOTFILES_EXEMPT" = "false" ]; then
   # Explicit refspec to a protected branch (origin main, :main, HEAD:main, remote branch)
   if contains_cmd "git[[:space:]]+push[[:space:]]+[^[:space:]]+[[:space:]]+([^[:space:]]*:)?($BR_REGEX)(\$|[[:space:]])"; then
     MATCHED_BRANCH=$(printf '%s' "$COMMAND" | grep -oE "($BR_REGEX)(\$|[[:space:]])" | head -1 | tr -d '[:space:]')
