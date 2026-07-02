@@ -100,6 +100,93 @@ if ! command -v impeccable >/dev/null 2>&1; then
   npx impeccable install --providers=claude --scope=global 2>&1 | tail -3 || echo "  WARNING: Impeccable install failed — run manually: npx impeccable install"
 fi
 
+# ── Ponytail plugin ───────────────────────────────────────────────────────────
+echo ""
+echo "▸ Installing Ponytail plugin..."
+PONYTAIL_VERSION="4.8.4"
+PONYTAIL_SHA="40e50d9e03242aa5dd53ac771950f9127362b25f"
+PONYTAIL_CACHE="$CLAUDE_DIR/plugins/cache/ponytail/ponytail/$PONYTAIL_VERSION"
+
+if [ ! -d "$PONYTAIL_CACHE/.claude-plugin" ]; then
+  mkdir -p "$PONYTAIL_CACHE"
+  git clone --depth=1 https://github.com/DietrichGebert/ponytail "$PONYTAIL_CACHE" 2>&1 | tail -1
+else
+  echo "  ✓ Ponytail already cached"
+fi
+
+# Register marketplace
+mkdir -p "$CLAUDE_DIR/plugins/marketplaces/ponytail"
+cp "$PONYTAIL_CACHE/.claude-plugin/marketplace.json" "$CLAUDE_DIR/plugins/marketplaces/ponytail/marketplace.json"
+
+# Register in installed_plugins.json
+python3 - << 'PYEOF'
+import json, os, datetime
+path = os.path.expanduser('~/.claude/plugins/installed_plugins.json')
+if not os.path.exists(path):
+    print("  WARNING: installed_plugins.json not found — skipping ponytail registration")
+    exit(0)
+with open(path) as f:
+    data = json.load(f)
+key = "ponytail@ponytail"
+if key not in data.get("plugins", {}):
+    data.setdefault("plugins", {})[key] = [{
+        "scope": "user",
+        "installPath": os.path.expanduser(f"~/.claude/plugins/cache/ponytail/ponytail/4.8.4"),
+        "version": "4.8.4",
+        "installedAt": datetime.datetime.utcnow().isoformat() + "Z",
+        "lastUpdated": datetime.datetime.utcnow().isoformat() + "Z",
+        "gitCommitSha": "40e50d9e03242aa5dd53ac771950f9127362b25f"
+    }]
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=2)
+    print("  ✓ Ponytail registered in installed_plugins.json")
+else:
+    print("  ✓ Ponytail already registered")
+PYEOF
+
+# Register in known_marketplaces.json
+python3 - << 'PYEOF'
+import json, os
+path = os.path.expanduser('~/.claude/plugins/known_marketplaces.json')
+if not os.path.exists(path):
+    print("  WARNING: known_marketplaces.json not found — skipping")
+    exit(0)
+with open(path) as f:
+    data = json.load(f)
+if "ponytail" not in data:
+    data["ponytail"] = {
+        "source": {"source": "github", "repo": "DietrichGebert/ponytail"},
+        "installLocation": os.path.expanduser("~/.claude/plugins/marketplaces/ponytail"),
+        "lastUpdated": "2026-07-02T09:59:00.000Z"
+    }
+    with open(path, 'w') as f:
+        json.dump(data, f, indent=2)
+    print("  ✓ Ponytail added to known_marketplaces.json")
+else:
+    print("  ✓ Ponytail already in known_marketplaces.json")
+PYEOF
+
+# Ponytail default config
+mkdir -p "$HOME/.config/ponytail"
+if [ ! -f "$HOME/.config/ponytail/config.json" ]; then
+  echo '{"defaultMode":"full"}' > "$HOME/.config/ponytail/config.json"
+  echo "  ✓ Ponytail config written (mode: full)"
+fi
+
+# ── draw.io CLI (required by drawio-skill) ────────────────────────────────────
+echo ""
+echo "▸ Checking draw.io CLI..."
+if ! command -v drawio >/dev/null 2>&1; then
+  echo "  draw.io not found — downloading v30.2.6..."
+  wget -q -O /tmp/drawio.deb \
+    "https://github.com/jgraph/drawio-desktop/releases/download/v30.2.6/drawio-amd64-30.2.6.deb"
+  sudo apt install -y /tmp/drawio.deb
+  sudo apt install -y xvfb
+  echo "  ✓ draw.io $(drawio --version) + xvfb installed"
+else
+  echo "  ✓ draw.io $(drawio --version) already installed"
+fi
+
 # ── Settings merge ───────────────────────────────────────────────────────────
 echo ""
 echo "▸ Merging hooks into settings.json..."
@@ -177,4 +264,8 @@ echo "       export GITHUB_TOKEN=..."
 echo "  2. Re-enable Claude Code plugins in the app settings"
 echo "  3. Re-add MCP servers (see config/mcp-servers.md)"
 echo "  4. Restart Claude Code"
+echo ""
+echo "  Installed plugins:"
+echo "  • Ponytail v4.8.4  — lazy senior dev mode (active every session)"
+echo "  • drawio-skill     — diagram generation (natural language or /drawio)"
 echo ""
