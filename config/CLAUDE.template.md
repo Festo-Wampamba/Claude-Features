@@ -108,6 +108,16 @@ Global hooks are active on every session. Respect them — do not try to bypass 
 - When inside a git worktree, preserve branch isolation — never assume sibling changes exist locally
 - Rely on hook results for formatting/test feedback rather than re-running
 
+## Global Skills: Ponytail + drawio-skill
+
+### Ponytail (active every session)
+Ponytail enforces a "least code that works" ladder: skip unneeded code, reuse stdlib/native features/installed deps, prefer one-liners, and only write custom code as a last resort. Security, accessibility, and data-loss handling are never simplified away.
+Use `/ponytail-review` before finishing a diff. Use `/ponytail-audit` for a full-repo bloat scan. Use `/ponytail ultra` only when explicitly asked for maximum minimalism.
+
+### drawio-skill (activates on diagram requests)
+When asked to create architecture diagrams, ERDs, UML class/sequence diagrams, flowcharts, or ML/DL layer diagrams, use drawio-skill instead of writing raw XML manually. It self-checks exported PNGs and auto-fixes overlaps/clipped labels for up to 2 rounds, then allows iterative refinement.
+Requires the draw.io desktop CLI (`drawio` binary) to be installed on this machine. Install: `sudo apt install -y /tmp/drawio.deb && sudo apt install -y xvfb`
+
 ## Portability
 This setup is versioned at: https://github.com/festo-dev/claude-features
 To restore on a new machine: `bash <(curl -fsSL https://raw.githubusercontent.com/festo-dev/claude-features/main/install.sh)`
