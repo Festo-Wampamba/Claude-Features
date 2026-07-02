@@ -119,5 +119,5 @@ When asked to create architecture diagrams, ERDs, UML class/sequence diagrams, f
 Requires the draw.io desktop CLI (`drawio` binary) to be installed on this machine. Install: `sudo apt install -y /tmp/drawio.deb && sudo apt install -y xvfb`
 
 ## Portability
-This setup is versioned at: https://github.com/festo-dev/claude-features
-To restore on a new machine: `bash <(curl -fsSL https://raw.githubusercontent.com/festo-dev/claude-features/main/install.sh)`
+This setup is versioned at: https://github.com/Festo-Wampamba/Claude-Features
+To restore on a new machine: `bash <(curl -fsSL https://raw.githubusercontent.com/Festo-Wampamba/Claude-Features/main/install.sh)`
