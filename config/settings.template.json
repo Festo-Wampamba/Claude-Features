@@ -192,7 +192,6 @@
     "mcp-server-dev@claude-plugins-official": true,
     "data-engineering@claude-plugins-official": true,
     "sourcegraph@claude-plugins-official": true,
-    "neon@claude-plugins-official": true,
     "cloudinary@claude-plugins-official": true,
     "vercel@claude-plugins-official": true,
     "ponytail@ponytail": true,
