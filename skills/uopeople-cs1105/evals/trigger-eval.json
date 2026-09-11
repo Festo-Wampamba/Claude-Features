@@ -1,0 +1,22 @@
+[
+  {"query": "yo the unit 3 discussion for CS1105 just dropped, it's about sequential logic and flip-flops, can you help me draft it before wednesday", "should_trigger": true},
+  {"query": "I'm stuck on the Unit 4 Learning Journal for Digital EC & ARCH, need to design a 4-bit adder circuit in Logisim and write it up", "should_trigger": true},
+  {"query": "can you check my unit 2 discussion post for that ai-writing feel, it's for my uopeople digital electronics class and I don't want turnitin flagging it", "should_trigger": true},
+  {"query": "pasting the unit 5 learning guide below, it's about memory and programmable logic, need the assignment activity done by wednesday same format as before", "should_trigger": true},
+  {"query": "my professor for CS 1105 wants a discussion reply to two classmates, min 75 words each, here's what they posted: 'I think combinational circuits are better because...' and 'sequential circuits are more useful in real life since...'", "should_trigger": true},
+  {"query": "need to redo the truth table and boolean simplification for the ALU assignment, unit 6 computer architecture, using the ndjountche textbook", "should_trigger": true},
+  {"query": "does this discussion post about karnaugh maps sound like a human wrote it or does it read like chatgpt", "should_trigger": true},
+  {"query": "unit 7 assembler language assignment for my digital electronics course, need it grounded in the tecs software readings", "should_trigger": true},
+  {"query": "here's the unit 8 rubric and my draft on compiler processes, can you check it matches the reading and doesn't sound robotic", "should_trigger": true},
+  {"query": "open the digital ec & arch folder and help me finish this week's coursework, i think it's on sequential circuits", "should_trigger": true},
+  {"query": "write a fibonacci function in python", "should_trigger": false},
+  {"query": "can you make this marketing email sound less like AI wrote it, my boss thinks it reads robotic", "should_trigger": false},
+  {"query": "help me design a 4-bit adder circuit in Logisim for my personal side project, not for any class", "should_trigger": false},
+  {"query": "I'm taking a different uopeople course, BUS 1101 intro to business, need help with the unit 3 discussion post", "should_trigger": false},
+  {"query": "explain the difference between combinational and sequential logic for my job interview prep, not a class assignment", "should_trigger": false},
+  {"query": "check my chemistry lab report for AI-sounding phrases before I submit it", "should_trigger": false},
+  {"query": "help me write a discussion forum reply for my CS50 harvard course about recursion", "should_trigger": false},
+  {"query": "quick question, what java version does logisim need", "should_trigger": false},
+  {"query": "can you review my resume and make the bullet points sound more natural, less generated", "should_trigger": false},
+  {"query": "my kid needs help with a high school worksheet on AND/OR gates, totally separate from my own uopeople course", "should_trigger": false}
+]
