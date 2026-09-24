@@ -38,12 +38,15 @@ most words.
 
 Every factual or technical claim in the draft needs to trace back to something real:
 
-- The assigned textbook is Ndjountche, T. (2016). *Digital electronics 1: Combinational logic
-  circuits*. Wiley. It's behind the UoPeople library paywall, so you cannot fetch its actual text.
-  Cite it by the chapter and section numbers the reading list already gives you (e.g. "Section 3.2:
-  Multiplexer") and describe concepts at the level of generality the reading list's own summary
-  describes - never invent a page number, a direct quote, or a specific claim you can't source from
-  what's in front of you.
+- The assigned textbooks are Ndjountche, T. (2016) *Digital electronics 1* and *Digital electronics
+  2* (Wiley). Check the course root for the PDFs first (`Digital Electronics (Vol. 1).pdf` is there;
+  extract with `pdftotext -layout` and read the assigned sections). The ebook viewer's page numbers
+  in the reading list include front matter, so find sections by heading, not page. The book has real
+  errata in worked examples: re-verify any number before reusing it, and see
+  `Unit4/Unit4_Study_Notes.md` for the known list. If a volume is not on disk, cite by the chapter
+  and section numbers the reading list gives and never invent page numbers, quotes, or claims.
+- Each `Unit<N>/` folder may hold a `Unit<N>_Study_Notes.md` built from the readings. Read it before
+  drafting that unit's work.
 - For anything with a public URL - Logisim/Logisim-evolution documentation, a YouTube video's own
   description or transcript, a vendor datasheet - actually fetch it (WebFetch/WebSearch) and use what
   it really says instead of paraphrasing from memory. If a page won't load or a transcript isn't
