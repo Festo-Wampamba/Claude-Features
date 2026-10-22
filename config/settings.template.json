@@ -42,6 +42,16 @@
             "statusMessage": "Loading project context..."
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/home/festo/.claude/skills/impeccable/scripts/impeccable' ] || '/home/festo/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 5,
+            "statusMessage": "Preparing build session"
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
@@ -125,6 +135,17 @@
             "statusMessage": "Running matching tests..."
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/home/festo/.claude/skills/impeccable/scripts/impeccable' ] || '/home/festo/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
       }
     ],
     "Stop": [
@@ -136,6 +157,16 @@
             "command": "/home/festo/.claude/hooks/sync-claude-features.sh",
             "timeout": 30,
             "statusMessage": "Syncing to GitHub..."
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f '/home/festo/.claude/skills/impeccable/scripts/impeccable' ] || '/home/festo/.claude/skills/impeccable/scripts/impeccable' hook",
+            "timeout": 30,
+            "statusMessage": "Design deep pass"
           }
         ]
       }
