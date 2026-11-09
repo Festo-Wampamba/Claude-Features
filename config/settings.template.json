@@ -202,6 +202,12 @@
         "source": "directory",
         "path": "/home/festo/.claude/plugins/local/ecc"
       }
+    },
+    "impeccable": {
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable"
+      }
     }
   },
   "enabledPlugins": {
