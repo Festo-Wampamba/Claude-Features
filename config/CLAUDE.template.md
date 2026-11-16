@@ -121,3 +121,15 @@ Requires the draw.io desktop CLI (`drawio` binary) to be installed on this machi
 ## Portability
 This setup is versioned at: https://github.com/festo-dev/claude-features
 To restore on a new machine: `bash <(curl -fsSL https://raw.githubusercontent.com/festo-dev/claude-features/main/install.sh)`
+
+# CLI-Anything (HKUDS/CLI-Anything)
+Makes any software agent-controllable through a CLI. Installed globally for **every** agent on this PC.
+- **Canonical skills:** `~/.agents/skills/cli-anything` (generator) and `~/.agents/skills/cli-hub-meta-skill` (discover/install). Symlinked into Claude, Codex, Gemini, OpenCode, Qwen, Kiro, Continue and Copilot skill dirs.
+- **Package manager:** `cli-hub` (installed with `uv tool install cli-anything-hub`). Telemetry is off via `CLI_HUB_NO_ANALYTICS=1` in `~/.config/environment.d/cli-hub.conf`.
+- **Source checkout:** `~/.local/share/CLI-Anything`. OpenCode slash commands are in `~/.config/opencode/command/cli-anything*.md`.
+
+When to use:
+- A task needs a desktop/server app (GIMP, Blender, LibreOffice, OBS, Kdenlive, draw.io, Zotero, n8n…) → `cli-hub search <keyword>`, then `cli-hub install <name>`, then `cli-hub launch <name> ...` or the installed `cli-anything-<name>` binary. Prefer `--json` output.
+- No CLI exists for the target software or repo → use the `cli-anything` skill (7-phase harness generator: read `references/HARNESS.md` first).
+
+Update: `git -C ~/.local/share/CLI-Anything pull && uv tool upgrade cli-anything-hub`, then re-run `CODEX_HOME=~/.agents bash ~/.local/share/CLI-Anything/codex-skill/scripts/install.sh` after removing `~/.agents/skills/cli-anything`.

@@ -4,7 +4,7 @@
 Hooks, skills, agents, rules, and a one-command restore for any machine or Claude account.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Skills](https://img.shields.io/badge/skills-70%2B-purple)](skills/)
+[![Skills](https://img.shields.io/badge/skills-180%2B-purple)](skills/)
 [![Hooks](https://img.shields.io/badge/hooks-9-green)](hooks/)
 [![Auto-sync](https://img.shields.io/badge/auto--sync-enabled-brightgreen)](#auto-sync)
 
@@ -26,7 +26,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Festo-Wampamba/Claude-Featur
 ```
 Claude-Features/
 ├── hooks/          ← 9 shell scripts (safety + automation)
-├── skills/         ← 70+ skills (design, workflow, utilities)
+├── skills/         ← 180+ skills (design, workflow, utilities)
 ├── agents/         ← 7 specialist agents
 ├── rules/          ← 6 modular code quality rules
 ├── config/
@@ -143,6 +143,17 @@ Skills are slash commands loaded by Claude Code. Invoke with `/skill-name` or re
 
 Full Remotion video creation skill set with rule files for: 3D, audio, captions, charts, fonts, Lottie, sequencing, transitions, voiceover, FFmpeg, and more. Auto-triggered when working in any Remotion project.
 
+### CLI-Anything (HKUDS/CLI-Anything)
+
+Makes any desktop/server software controllable by agents through a CLI. Two skills, shared with **every** agent on the machine (Claude Code, Codex, Gemini, OpenCode, Qwen, Kiro, Continue, Copilot):
+
+| Skill | What it does |
+|---|---|
+| `cli-hub-meta-skill` | Finds and installs a ready-made CLI from the CLI-Hub registry (GIMP, Blender, LibreOffice, OBS, Kdenlive, draw.io, Zotero, n8n, 70+ more) |
+| `cli-anything` | Generates a new CLI harness for any app or repo (7-phase methodology, `references/HARNESS.md`) |
+
+Layout on the machine: real files in `~/.agents/skills/<name>`, symlinks in each agent's `skills/` dir. The `cli-hub` package manager runs separately from the skills (`cli-hub search image`, `cli-hub install gimp`, `cli-hub launch gimp`).
+
 ---
 
 ## Agents
@@ -239,9 +250,20 @@ export GITHUB_TOKEN=ghp_...
 export GOOGLE_API_KEY=...
 source ~/.bashrc
 
-# 2. Restart Claude Code
-# 3. Re-enable plugins in Claude Code settings (see config/plugins.json)
-# 4. Re-add MCP servers (see config/mcp-servers.md)
+# 2. CLI-Anything: package manager + shared skills for all agents
+uv tool install cli-anything-hub
+mkdir -p ~/.config/environment.d && echo CLI_HUB_NO_ANALYTICS=1 > ~/.config/environment.d/cli-hub.conf
+git clone --depth 1 https://github.com/HKUDS/CLI-Anything ~/.local/share/CLI-Anything
+CODEX_HOME=~/.agents bash ~/.local/share/CLI-Anything/codex-skill/scripts/install.sh
+cp -R ~/.local/share/CLI-Anything/skills/cli-hub-meta-skill ~/.agents/skills/
+for d in ~/.codex ~/.gemini ~/.config/opencode ~/.qwen ~/.kiro ~/.continue ~/.copilot; do
+  mkdir -p $d/skills; ln -sfn ~/.agents/skills/cli-anything $d/skills/; ln -sfn ~/.agents/skills/cli-hub-meta-skill $d/skills/
+done
+cp ~/.local/share/CLI-Anything/opencode-commands/*.md ~/.config/opencode/command/
+
+# 3. Restart Claude Code
+# 4. Re-enable plugins in Claude Code settings (see config/plugins.json)
+# 5. Re-add MCP servers (see config/mcp-servers.md)
 ```
 
 ---
