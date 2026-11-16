@@ -75,7 +75,8 @@ if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --o
   git add -A
 
   # Build a meaningful commit message from what changed
-  CHANGED=$(git diff --cached --name-only | head -20)
+  # NOTE: `|| true` — head closes the pipe early on big diffs; SIGPIPE + pipefail used to kill the script before commit.
+  CHANGED=$(git diff --cached --name-only | head -20 || true)
   SKILLS_ADDED=$(echo "$CHANGED" | grep '^skills/' | awk -F'/' '{print $2}' | sort -u | tr '\n' ', ' | sed 's/,$//' || true)
   HOOKS_CHANGED=$(echo "$CHANGED" | grep '^hooks/' | wc -l || echo 0)
   RULES_CHANGED=$(echo "$CHANGED" | grep '^rules/' | wc -l || echo 0)
