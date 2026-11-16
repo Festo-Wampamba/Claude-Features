@@ -204,6 +204,14 @@ To manually trigger a sync:
 bash ~/.claude/hooks/sync-claude-features.sh
 ```
 
+### Founder skill (Jakeschincariol/founder-skill)
+
+Eleven skills that test a business before launch, shared with every agent on the machine through `~/.agents/skills/founder-*`:
+
+`founder-board` (Hormozi, Thiel and Jobs lenses) → `founder-competitors` → `founder-consumer` (panel of 100 simulated buyers) → `founder-pricing` (Van Westendorp) → `founder-offer` → `founder-cfo` (unit economics) → `founder-marketing` → `founder-brand` → `founder-ops` → `founder-launch` → `founder-plan` (computed verdict).
+
+Outputs go to `founder/` in the current project. The Python tools are stdlib only, with no network. Script paths fall back to `$HOME/.agents/skills/<skill>` when `CLAUDE_SKILL_DIR` is unset, so non-Claude agents can run them too.
+
 ---
 
 ## Install on a New Machine
@@ -261,9 +269,17 @@ for d in ~/.codex ~/.gemini ~/.config/opencode ~/.qwen ~/.kiro ~/.continue ~/.co
 done
 cp ~/.local/share/CLI-Anything/opencode-commands/*.md ~/.config/opencode/command/
 
-# 3. Restart Claude Code
-# 4. Re-enable plugins in Claude Code settings (see config/plugins.json)
-# 5. Re-add MCP servers (see config/mcp-servers.md)
+# 3. Founder skill: 11 business-testing skills for all agents
+git clone --depth 1 https://github.com/Jakeschincariol/founder-skill ~/.local/share/founder-skill
+for src in ~/.local/share/founder-skill/skills/founder-*; do s=$(basename $src)
+  cp -R $src ~/.agents/skills/
+  sed -i "s|\${CLAUDE_SKILL_DIR}|\${CLAUDE_SKILL_DIR:-\$HOME/.agents/skills/$s}|g" ~/.agents/skills/$s/SKILL.md
+  for d in ~/.codex ~/.gemini ~/.config/opencode ~/.qwen ~/.kiro ~/.continue ~/.copilot; do ln -sfn ~/.agents/skills/$s $d/skills/; done
+done
+
+# 4. Restart Claude Code
+# 5. Re-enable plugins in Claude Code settings (see config/plugins.json)
+# 6. Re-add MCP servers (see config/mcp-servers.md)
 ```
 
 ---

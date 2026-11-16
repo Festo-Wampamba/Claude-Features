@@ -133,3 +133,12 @@ When to use:
 - No CLI exists for the target software or repo → use the `cli-anything` skill (7-phase harness generator: read `references/HARNESS.md` first).
 
 Update: `git -C ~/.local/share/CLI-Anything pull && uv tool upgrade cli-anything-hub`, then re-run `CODEX_HOME=~/.agents bash ~/.local/share/CLI-Anything/codex-skill/scripts/install.sh` after removing `~/.agents/skills/cli-anything`.
+
+# Founder skill (Jakeschincariol/founder-skill)
+Eleven skills that test a business idea before launch. Installed globally for **every** agent on this PC.
+- **Canonical skills:** `~/.agents/skills/founder-*`, symlinked into Claude, Codex, Gemini, OpenCode, Qwen, Kiro, Continue and Copilot. Source checkout: `~/.local/share/founder-skill`.
+- **Portability patch:** script paths use `${CLAUDE_SKILL_DIR:-$HOME/.agents/skills/<skill>}`, so the Python tools also work in agents that don't set `CLAUDE_SKILL_DIR`. Python 3.8+, stdlib only, no network.
+- **Order:** board → competitors → consumer → pricing → offer → cfo → marketing → brand → ops → launch → plan. Each skill reads and writes files in the project's `founder/` folder. Any skill can run on its own (`/founder-consumer --quick` = 20-buyer panel).
+- **Caveats:** the panel is simulated buyers (an upper bound, not a forecast); the CFO numbers are only as good as the inputs; this is not financial, legal or tax advice.
+
+Update: `git -C ~/.local/share/founder-skill pull`, then for each `skills/founder-*` copy it over `~/.agents/skills/` and re-apply the `CLAUDE_SKILL_DIR` fallback with sed.
