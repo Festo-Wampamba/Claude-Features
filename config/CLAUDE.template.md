@@ -142,3 +142,9 @@ Eleven skills that test a business idea before launch. Installed globally for **
 - **Caveats:** the panel is simulated buyers (an upper bound, not a forecast); the CFO numbers are only as good as the inputs; this is not financial, legal or tax advice.
 
 Update: `git -C ~/.local/share/founder-skill pull`, then for each `skills/founder-*` copy it over `~/.agents/skills/` and re-apply the `CLAUDE_SKILL_DIR` fallback with sed.
+
+# LLM Council (karpathy/llm-council)
+Sends one question to several frontier models through OpenRouter. Each answers, each anonymously ranks the others, and a chairman writes the final answer. Shared skill `llm-council` for **every** agent (in `~/.agents/skills/llm-council`, symlinked into Claude, Codex, Gemini, OpenCode, Qwen, Kiro, Continue and Copilot).
+- **CLI:** `llm-council ask "q" [--full|--json]` (headless), `llm-council ui` (web UI at localhost:5173), `llm-council models`.
+- **App:** `~/.local/share/llm-council`. Key: `OPENROUTER_API_KEY` in its `.env`. Council: GPT-5.6 Sol, Gemini 3.1 Pro, Claude Opus 5.5 and Grok 4.7, with Gemini 3.1 Pro as chairman. These replaced the upstream defaults that OpenRouter no longer serves.
+- **Every run costs OpenRouter credits** (about 9 premium calls). Run it only when asked. The UI binds 127.0.0.1, not the upstream 0.0.0.0.

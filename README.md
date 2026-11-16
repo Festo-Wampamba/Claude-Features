@@ -212,6 +212,18 @@ Eleven skills that test a business before launch, shared with every agent on the
 
 Outputs go to `founder/` in the current project. The Python tools are stdlib only, with no network. Script paths fall back to `$HOME/.agents/skills/<skill>` when `CLAUDE_SKILL_DIR` is unset, so non-Claude agents can run them too.
 
+### LLM Council (karpathy/llm-council)
+
+Sends one question to GPT, Gemini, Claude and Grok through OpenRouter. They each answer, anonymously rank each other, and a chairman writes the final answer. Wrapped as a shared skill (`skills/llm-council`) plus an `llm-council` command any agent can call:
+
+```bash
+llm-council ask "question" [--full|--json]   # headless; this is what agents use
+llm-council ui                               # web UI, localhost:5173 (bound to 127.0.0.1)
+llm-council models                           # show the council and chairman
+```
+
+Needs `OPENROUTER_API_KEY` in `~/.local/share/llm-council/.env`. Every question costs about 9 paid model calls.
+
 ---
 
 ## Install on a New Machine
@@ -277,9 +289,17 @@ for src in ~/.local/share/founder-skill/skills/founder-*; do s=$(basename $src)
   for d in ~/.codex ~/.gemini ~/.config/opencode ~/.qwen ~/.kiro ~/.continue ~/.copilot; do ln -sfn ~/.agents/skills/$s $d/skills/; done
 done
 
-# 4. Restart Claude Code
-# 5. Re-enable plugins in Claude Code settings (see config/plugins.json)
-# 6. Re-add MCP servers (see config/mcp-servers.md)
+# 4. LLM Council: app + shared skill + launcher (then add OPENROUTER_API_KEY to its .env yourself)
+git clone --depth 1 https://github.com/karpathy/llm-council ~/.local/share/llm-council
+(cd ~/.local/share/llm-council && uv sync && cd frontend && pnpm approve-builds esbuild && pnpm install)
+cp -R ~/claude-features/skills/llm-council ~/.agents/skills/ && chmod +x ~/.agents/skills/llm-council/scripts/llm-council
+ln -sfn ~/.agents/skills/llm-council/scripts/llm-council ~/.local/bin/llm-council
+for d in ~/.codex ~/.gemini ~/.config/opencode ~/.qwen ~/.kiro ~/.continue ~/.copilot; do ln -sfn ~/.agents/skills/llm-council $d/skills/; done
+# then set current model IDs in backend/config.py (upstream defaults are retired on OpenRouter)
+
+# 5. Restart Claude Code
+# 6. Re-enable plugins in Claude Code settings (see config/plugins.json)
+# 7. Re-add MCP servers (see config/mcp-servers.md)
 ```
 
 ---

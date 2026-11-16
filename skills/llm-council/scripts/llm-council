@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Launcher for Karpathy's LLM Council (~/.local/share/llm-council).
+#   llm-council ask "question" [--json] [--full]   headless council, prints the answer
+#   llm-council ui                                 web UI at http://localhost:5173
+#   llm-council models                             show council + chairman models
+set -euo pipefail
+APP="${LLM_COUNCIL_HOME:-$HOME/.local/share/llm-council}"
+ASK="$HOME/.agents/skills/llm-council/scripts/ask.py"
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  ask) exec uv run --quiet --project "$APP" python "$ASK" "$@" ;;
+  ui)
+    cd "$APP"
+    # Bind to localhost only: upstream uses 0.0.0.0, which lets anyone on the network spend your OpenRouter credits.
+    uv run --quiet uvicorn backend.main:app --host 127.0.0.1 --port 8001 & BACK=$!
+    trap 'kill $BACK 2>/dev/null' EXIT INT TERM
+    cd frontend && pnpm exec vite --host 127.0.0.1 --port 5173 ;;
+  models) sed -n '/^COUNCIL_MODELS/,/^CHAIRMAN_MODEL/p' "$APP/backend/config.py" ;;
+  *) sed -n '3,5p' "$(readlink -f "$0")" | sed 's/^# \{0,1\}//' ;;
+esac
