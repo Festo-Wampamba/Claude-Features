@@ -148,3 +148,12 @@ Sends one question to several frontier models through OpenRouter. Each answers, 
 - **CLI:** `llm-council ask "q" [--full|--json]` (headless), `llm-council ui` (web UI at localhost:5173), `llm-council models`.
 - **App:** `~/.local/share/llm-council`. Key: `OPENROUTER_API_KEY` in its `.env`. Council: GPT-5.6 Sol, Gemini 3.1 Pro, Claude Opus 5.5 and Grok 4.7, with Gemini 3.1 Pro as chairman. These replaced the upstream defaults that OpenRouter no longer serves.
 - **Every run costs OpenRouter credits** (about 9 premium calls). Run it only when asked. The UI binds 127.0.0.1, not the upstream 0.0.0.0.
+
+# Modern Web Guidance (GoogleChrome/modern-web-guidance)
+Google Chrome's skills for modern HTML/CSS/client-side JS best practices. Installed globally for **every** agent on this PC.
+- **Skills:** `modern-web-guidance` (search/retrieve 200+ web guides) and `chrome-extensions` (Manifest V3 + Web Store).
+- **Canonical:** `~/.agents/skills/{modern-web-guidance,chrome-extensions}` → symlinks into the git checkout `~/.local/share/modern-web-guidance/skills/`. Linked into Claude, Codex, Gemini, OpenCode, Qwen, Kiro, Continue and Copilot skill dirs.
+- **Runtime:** the skill calls `npx -y modern-web-guidance@latest search "<query>"`, then `retrieve "<id>"` (Node 22+ and npm registry access needed).
+- Not installed as a Claude plugin on purpose (it would load the same skill twice).
+
+Update: `git -C ~/.local/share/modern-web-guidance pull` (symlinks pick it up automatically).
