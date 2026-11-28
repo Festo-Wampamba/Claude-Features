@@ -1,0 +1,6 @@
+{
+  "name": "jarvis",
+  "version": "0.1.0",
+  "description": "Jarvis: one pack of Claude Code mods (Undo Point, Proof Check, Stream Safe, Welcome Back, Mission Control, Slop Spotter, Rule Keeper, Context X-Ray, Pip, Mod Doctor, Heist Skin). Type /jarvis.",
+  "types": "./types/index.d.ts"
+}
