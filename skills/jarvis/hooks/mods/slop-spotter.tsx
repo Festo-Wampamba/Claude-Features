@@ -76,21 +76,34 @@ export async function slopToolCall(
   return ran
 }
 
-// Claude's replies: the reply as drawn, then its flagged lines marked underneath.
+// One plain line about a reply. Copying flagged lines under the reply showed raw markdown and read as a garbled duplicate.
+export function slopSummary(text: string): string | undefined {
+  const spans = text.split('\n').flatMap(line => slopSpans(line).map(s => ({ ...s, word: line.slice(s.start, s.end) })))
+  if (spans.length === 0) return undefined
+  const words = [...new Set(spans.filter(s => s.kind === 'hype').map(s => `"${s.word.toLowerCase()}"`))]
+  const dashes = spans.filter(s => s.kind === 'dash').length
+  const triads = spans.filter(s => s.kind === 'triad').length
+  const parts = [
+    ...(words.length > 0 ? [`hype ${words.join(', ')}`] : []),
+    ...(dashes > 0 ? [`${dashes} long ${dashes === 1 ? 'dash' : 'dashes'}`] : []),
+    ...(triads > 0 ? [`${triads} ${triads === 1 ? 'list' : 'lists'} of three`] : []),
+  ]
+  return `Slop Spotter: ${parts.join('; ')}`
+}
+
+// Claude's replies: drawn untouched, with one summary line underneath.
 export async function slopAssistant($: EngineInterface, e: Render<'AssistantMessage'>, next: Step<'ui.render'>) {
   const drawn = await next(e)
   if (!(await isOn($, 'slop'))) return drawn
   const isMasked = await isOn($, 'stream')
   const text = isMasked ? redact(e.props.text, await read($, names)) : e.props.text
-  const flagged = scanSlop(text).slice(0, 4)
-  if (flagged.length === 0) return drawn
-  const ui = $.ui.resolve(e) as Ui
-  const { Box, Text } = ui
+  const summary = slopSummary(text)
+  if (summary === undefined) return drawn
+  const { Box, Text } = $.ui.resolve(e) as Ui
   return (
     <Box flexDirection="column">
       {drawn}
-      <Text dimColor>Slop Spotter:</Text>
-      {flagged.map(f => marked(ui, f.text, `slop-${f.line}`))}
+      <Text dimColor>{summary}</Text>
     </Box>
   )
 }

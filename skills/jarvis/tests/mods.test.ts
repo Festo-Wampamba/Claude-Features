@@ -6,6 +6,7 @@ import { totalLine } from '../hooks/mods/mission-control'
 import { clashesOf, risksOf, scanSource } from '../hooks/mods/mod-doctor'
 import { PIP_GRID, pipRows, pipSays } from '../hooks/mods/pip'
 import { unverifiedLine } from '../hooks/mods/proof-check'
+import { slopSummary } from '../hooks/mods/slop-spotter'
 import { blockMessage, filesLabel, outermost } from '../hooks/mods/undo-point'
 
 test('one file is a file, not files', () => {
@@ -73,4 +74,12 @@ test('the status line lists what is on, Stream Safe off by default', () => {
 
 test('the status line says Stream Safe ON when it is', () => {
   expect(statusLine({ stream: true })).toMatch(/^Stream Safe ON · /)
+})
+
+test('Slop Spotter sums up a reply in one line instead of copying it', () => {
+  expect(slopSummary('A seamless fix — `/jarvis` opens it.\nIt is fast, simple, and fun.')).toBe('Slop Spotter: hype "seamless"; 1 long dash; 1 list of three')
+})
+
+test('Slop Spotter says nothing about a plain reply', () => {
+  expect(slopSummary('We shipped the export button today.')).toBeUndefined()
 })
